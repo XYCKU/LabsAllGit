@@ -1,6 +1,6 @@
 #include <cstdio>
 
-double rec(int i) {
+double rec(int i) { // Рекурсивная функция
     if (i > 0) 
         return 1. / i + rec(i - 1);
     return 0;
@@ -8,11 +8,11 @@ double rec(int i) {
 
 int main()
 {
-    int k;
-    printf("Vvedite K: ");
+    int k; // Переменная
+    printf("Vvedite K: "); // Ввод данных
     scanf_s("%d", &k);
 
-    printf("%.4lf\n", rec(k));
+    printf("%.4lf\n", rec(k)); // Вывод ответа
 
     return 0;
 }
