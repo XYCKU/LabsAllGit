@@ -133,23 +133,23 @@ void calculateAnswer() { // Вычисление суммы для абонента
     printf("Оплата для абонента %s составляет %lf", number, answer);
 }
 
-void insertSort(CallInfo* arr, int n) {
+void insertSort(CallInfo* arr, int N) {
 
 }
 
-void quickSort(CallInfo* arr, int n) {
-    int i = 0, j = n;
-    CallInfo temp;
+void quickSort(CallInfo* arr, int N) {
+    int i = 0, j = N;
     char middle[15];
-    strcpy(middle, arr[n / 2].number);
+    strcpy(middle, arr[N / 2].number);
+    cout << middle << endl;
     do {
-        while (strcmp(a[i].number, middle) < 0) i++;
-        while (strcmp(a[j].number, middle) > 0) j++;
+        while (strcmp(arr[i].number, middle) < 0) i++;
+        while (strcmp(arr[j].number, middle) > 0) j++;
         if (i <= j) {
-            swap(a[i], a[j]);
+            swap(arr[i], arr[j]);
             i++; j--;
         }
     } while (i <= j);
     if (j > 0) quickSort(arr, j);
-    if (n > i) quickSort(arr + i, n - i);
+    if (N > i) quickSort(arr + i, N - i);
 }
