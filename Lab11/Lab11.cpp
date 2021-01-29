@@ -26,8 +26,8 @@ void readFile(); // Чтение данных из файла
 void writeFile(); // Запись данных в файл
 void printData(); // Вывод данных о звонках на экран
 void calculateAnswer(); // Вычисление суммы для абонента
-void insertSort(CallInfo*, int);
-void quickSort(CallInfo*, int);
+void insertSort(CallInfo*, int); // Сортировка вставками
+void quickSort(CallInfo*, int, int); // Быстрая сортировка
 
 int main()
 {
@@ -44,15 +44,12 @@ int main()
         case 4: writeFile(); break;
         case 5: printData(); break;
         case 6: calculateAnswer(); break;
-        case 7: insertSort(a, n); break;
-        case 8: quickSort(a, n); break;
+        case 7: insertSort(a, n); printf("Массив отсортирован с помощью сортировки вставками\n"); break;
+        case 8: quickSort(a, 0, n - 1); printf("Массив отсортирован методом быстрой сортировки\n"); break;
         case 9: printf("Завершение работы\n"); return 0; break; // Выход из программыы
         default: printf("Введите корректное значение\n"); // Если введено некорректное значение, то пользователь увидит ошибку
         }
     }
-
-
-
     return 0;
 }
 
@@ -99,7 +96,7 @@ void writeFile() { // Запись данных в файл
     printf("Введите имя файла вывода: ");
     cin >> fName; // Чтение имени файла для записи
     if ((fl = fopen(fName, "w")) == NULL) { // В случае ошибки программа прекратит работу
-        printf("Ошибка при создании файла вывода");
+        printf("Ошибка при создании файла вывода\n");
         exit(1);
     }
     string s;
@@ -134,22 +131,29 @@ void calculateAnswer() { // Вычисление суммы для абонента
 }
 
 void insertSort(CallInfo* arr, int N) {
-
+    char temp[15];
+    for (int i = 1; i < n; i++) {
+        for (int j = i; j > 0 && strcmp(arr[j].number, arr[j-1].number) < 0; j--) {
+            swap(arr[j - 1], arr[j]);
+        }
+    }
 }
 
-void quickSort(CallInfo* arr, int N) {
-    int i = 0, j = N;
-    char middle[15];
-    strcpy(middle, arr[N / 2].number);
-    cout << middle << endl;
-    do {
-        while (strcmp(arr[i].number, middle) < 0) i++;
-        while (strcmp(arr[j].number, middle) > 0) j++;
-        if (i <= j) {
-            swap(arr[i], arr[j]);
-            i++; j--;
-        }
-    } while (i <= j);
-    if (j > 0) quickSort(arr, j);
-    if (N > i) quickSort(arr + i, N - i);
+void quickSort(CallInfo* arr, int first, int last) {
+    if (first < last) {
+        int left = first, right = last;
+        char middle[15];
+        strcpy(middle, arr[(left + right) / 2].number);
+        do {
+            while (strcmp(arr[left].number, middle) < 0) left++;
+            while (strcmp(arr[right].number, middle) > 0) right--;
+            if (left <= right) {
+                swap(arr[left], arr[right]);
+                left++;
+                right--;
+            }
+        } while (left <= right);
+        quickSort(arr, first, right);
+        quickSort(arr, left, last);
+    }
 }
