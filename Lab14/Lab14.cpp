@@ -14,6 +14,7 @@ void AddItemQueue(Queue**, Queue**, int); // Добавление элемента в очередь
 void FindUnderAverageQueue(Queue**, double); // Поиск и удаление элементов очереди, которые меньше среднего значения
 void DeleteNextQueue(Queue*); // Удаление следующего за этим элемента очереди
 void PrintQueue(Queue*); // Вывести все элементы очереди на экран
+void DeleteQueue(Queue**, Queue**); // Удаление очереди
 
 int main()
 {
@@ -43,6 +44,7 @@ int main()
 
     printf("Содержимое очереди после удаления: \n");
     PrintQueue(begin->child); // Вывод содержания очереди после удаления на экран
+    DeleteQueue(&begin, &end); // Удаление очереди
     return 0;
 }
 
@@ -75,6 +77,15 @@ void FindUnderAverageQueue(Queue** item, double aver) { // Поиск и удаление элем
     }
     else { // Иначе переходим к следующему элементу
         FindUnderAverageQueue(&((*item)->child), aver);
+    }    
+}
+void DeleteQueue(Queue** begin, Queue** end) { // Удаление очереди
+    Queue* item;
+    while (*begin != 0) {
+        item = *begin;
+        *begin = (*begin)->child;
+        delete item;
     }
-    
+    *end = 0;
+    printf("Очередь удалена\n");
 }
