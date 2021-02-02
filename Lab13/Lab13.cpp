@@ -13,6 +13,7 @@ struct Stack { // Структура элемента стека
 Stack* AddStack(Stack*, int); // Добавление элемента в стек
 void FindThirdStack(Stack*, int); // Поиск каждого третьего элемента и помещение в другой стек
 void PrintStack(Stack*); // Вывести все элементы стека на экран
+void DeleteStack(Stack*); // Удаление стека
 
 Stack* answer = new Stack; // Стек с каждым третьим элементом основного стека
 
@@ -22,7 +23,7 @@ int main()
     Stack* base = new Stack; // Основной стек
     
     int n;
-    printf("Введите количество элементов и элементы первого стека:");
+    printf("Введите количество элементов и элементы первого стека: ");
     scanf("%d", &n);
     for (int i = 0; i < n; i++) { // Чтение элементов основного стека
         int temp;
@@ -37,6 +38,7 @@ int main()
 
     printf("Содержимое второго стека: \n"); 
     PrintStack(answer); // Вывод содержания второго стека на экран
+    DeleteStack(base); // Удаление стека
     return 0;
 }
 
@@ -55,12 +57,20 @@ void FindThirdStack(Stack* item, int i) { // Поиск каждого третьего элемента и п
     }
 
 }
-void PrintStack(Stack* item) { // Вывести все элементы стека на экра
+void PrintStack(Stack* item) { // Вывести все элементы стека на экран
     if (item->parent != NULL) { 
         printf("%d ", item->value);
         PrintStack(item->parent); // Рекурсивно выводим все элементы стека
     }
     else {
         printf("\n"); // Переход на новую строчку после вывода всех элементов
+    }
+}
+void DeleteStack(Stack* base) { // Удаление стека
+    Stack* item;
+    while (base != 0) {
+        item = base;
+        base = base->parent;
+        delete item;
     }
 }
