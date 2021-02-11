@@ -1,7 +1,8 @@
 #include <cstdio>
 
-double rec(int i) { // Рекурсивная функция
-    if (i > 0) 
+double rec(int i)
+{ // Рекурсивная функция
+    if (i > 0)
         return 1. / i + rec(i - 1);
     return 0;
 }
