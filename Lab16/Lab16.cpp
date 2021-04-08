@@ -9,10 +9,11 @@ using namespace std;
 struct Tree // Структура элемента очереди
 { 
     int value; // Значение элемента
-    Tree* left; // Указатель на левый элемент
-    Tree* right; // Указатель на правый элемент
+    Tree* left = NULL; // Указатель на левый элемент
+    Tree* right = NULL; // Указатель на правый элемент
 };
 
+Tree* BuildTree(int*, int, int, Tree*); // Построение дерева из массива данных
 Tree* NewNode(int); // Создание нового узла
 Tree* AddNode(Tree*, int); // Добавление узла в дерево
 Tree* DeleteNode(Tree*, int); // Удаление узла из дерева
@@ -22,7 +23,8 @@ Tree* MinValueNode(Tree*); // Поиск минимального значения в дереве
 void StraightPrint(Tree*); // Прямой обход дерева
 void ReversePrint(Tree*); // Обратный обход дерева
 void IncPrint(Tree*); // Обход в порядке возрастания элементов
-int CountNodes(Tree*); // Посчитать количество узлов 
+void quickSort(int*, int, int);
+int CountNodes(Tree*); // Посчитать количество узлов
 
 int main()
 {
@@ -34,11 +36,17 @@ int main()
 
     printf("Введите количество элементов: "); // Чтение количества элементов
     scanf("%d", &n);
+    int* a = new int[n];
     for (int i = 0; i < n; i++) // Заполнение списка элементами
     {
         int temp = rand() % 101 - 50; // Генерация чисел в диапазоне [-50;50]
-        root = AddNode(root, temp);  // Добавление узла в дерево
+        a[i] = temp;
     }
+    quickSort(a, 0, n - 1); // Сортировка массива элементов
+    printf("Значения добавляемых узлов: ");
+    root = BuildTree(a, 0, n - 1, root); // Построение сбалансированного дерева
+    printf("\n");
+
     printf("\nВсе узлы дерева (прямой обход):\n");
     StraightPrint(root); // Прямой обход дерева
     printf("\n");
@@ -78,6 +86,17 @@ int main()
     printf("\nДерево удалено");
 
     return 0;
+}
+Tree* BuildTree(int* arr, int start, int end, Tree* root) // Построение взвешенного дерева
+{
+    if (start > end) return 0;
+
+    int mid = (start + end) / 2; // Индекс элемента в середине массива
+    printf("%d ", arr[mid]);
+    root = AddNode(root, arr[mid]); // Добавляем корневой узел
+    root->left = BuildTree(arr, start, mid - 1, root->left); // Добавляем узел в левую ветвь
+    root->right = BuildTree(arr, mid + 1, end, root->right); // Добавляем узел в правую ветвь
+    return root;
 }
 Tree* NewNode(int value) // Создание нового узла
 {
@@ -129,14 +148,18 @@ Tree* DeleteNode(Tree* root, int value) // Удаление узла из дерева
     return root; // Возвращаем корень дерева
 }
 Tree* FindNode(Tree* node, int value) // Поиск узла в дереве
-{
-    if (node == 0) return 0; // Если узла нет, то возвращаем 0
+{ 
+    if (node == NULL) return 0; // Если узла нет, то возвращаем 0
     if (node->value == value) return node; // Если нашли, то возвращаем узел
-    if (node->value > value) // Если искомое значение меньше значения узла, то идем влево
+    
+    if (value < node->value) // Если искомое значение меньше значения узла, то идем влево
+    {
         FindNode(node->left, value);
+    }
     else // Иначе идем вправо
+    {
         FindNode(node->right, value);
-    return 0;
+    }
 }
 Tree* DeleteTree(Tree* root) // Удаление всего дерева
 {
@@ -178,6 +201,26 @@ void IncPrint(Tree* node) // Обход в порядке возрастания элементов
         IncPrint(node->left);
         printf("%d ", node->value);
         IncPrint(node->right);
+    }
+}
+void quickSort(int* arr, int first, int last) // Быстрая сортировка
+{
+    if (first < last)
+    {
+        int left = first, right = last, middle = arr[(left + right) / 2];
+        do
+        {
+            while (arr[left] < middle) left++;
+            while (arr[right] > middle) right--;
+            if (left <= right)
+            {
+                swap(arr[left], arr[right]);
+                left++;
+                right--;
+            }
+        } while (left <= right);
+        quickSort(arr, first, right);
+        quickSort(arr, left, last);
     }
 }
 int CountNodes(Tree* node) // Посчитать количество узлов
